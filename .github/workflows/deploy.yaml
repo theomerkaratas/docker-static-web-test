@@ -15,6 +15,6 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}  
           password: ${{ secrets.DOCKER_PASSWORD }}  
       - name: Build test image
-        run: docker build -t theomerkaratas/react-test -f Dockerfile.dev .
+        run: docker build -t theomerkaratas/docker-static-web-test -f Dockerfile.dev .
       - name: Run tests
-        run: docker run -e CI=true theomerkaratas/react-test npm test
+        run: docker run -e CI=true theomerkaratas/docker-static-web-test npm test
