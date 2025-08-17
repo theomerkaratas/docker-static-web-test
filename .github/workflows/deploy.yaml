@@ -18,3 +18,18 @@ jobs:
         run: docker build -t theomerkaratas/docker-static-web-test -f Dockerfile.dev .
       - name: Run tests
         run: docker run -e CI=true theomerkaratas/docker-static-web-test npm test
+
+      - name: Generate deployment package
+        run: zip -r deploy.zip . -x '*.git*'
+
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v18
+        with:
+          application_name: frontend
+          environment_name: Frontend-env
+          existing_bucket_name: elasticbeanstalk-eu-west-1-895318998887
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
+          region: eu-west-1
+          version_label: ${{ github.sha }}
+          deployment_package: deploy.zip
